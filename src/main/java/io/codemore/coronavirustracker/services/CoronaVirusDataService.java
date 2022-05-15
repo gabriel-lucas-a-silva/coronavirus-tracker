@@ -26,15 +26,13 @@ public class CoronaVirusDataService {
 
     private static String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
     private static String COUNTRY = "Country/Region";
-    private List<LocationStat> allStats = new ArrayList<>();
+
     private int totalReportedCases;
     private int totalNewCases;
 
     @PostConstruct
     @Scheduled(cron = "* * 1 * * *")
-    public void fetchVirusData() throws Exception {
-        List<LocationStat> newStats = new ArrayList<>();
-
+    public List<LocationStat> fetchVirusData() throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(VIRUS_DATA_URL))
@@ -42,10 +40,13 @@ public class CoronaVirusDataService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        renderCsvData(newStats, response);
+        return renderCsvData(response);
     }
 
-    private void renderCsvData(final List<LocationStat> newStats, final HttpResponse<String> response) throws IOException {
+    public List<LocationStat> renderCsvData(final HttpResponse<String> response) throws IOException {
+        this.totalReportedCases = 0;
+        this.totalNewCases = 0;
+        List<LocationStat> newStats = new ArrayList<>();
         StringReader csvBodyReader = new StringReader(response.body());
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.builder()
                 .setHeader()
@@ -80,7 +81,7 @@ public class CoronaVirusDataService {
             }
         }
 
-        this.allStats = newStats;
+        return newStats;
     }
 
 }

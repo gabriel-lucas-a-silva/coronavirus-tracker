@@ -15,8 +15,8 @@ public class HomeController {
     private CoronaVirusDataService coronaVirusDataService;
 
     @GetMapping("/")
-    public String home(Model model) {
-        model.addAttribute("locationStats", coronaVirusDataService.getAllStats());
+    public String home(Model model) throws Exception {
+        model.addAttribute("locationStats", coronaVirusDataService.fetchVirusData());
         model.addAttribute("totalReportedCases", decimalFormatter(coronaVirusDataService.getTotalReportedCases()));
         model.addAttribute("totalNewCases", decimalFormatter(coronaVirusDataService.getTotalNewCases()));
 
