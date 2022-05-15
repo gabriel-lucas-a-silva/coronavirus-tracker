@@ -23,7 +23,7 @@ public class CoronaVirusDataServiceTest extends TestContainer {
 
     @Test
     public void shouldFetchVirusData() throws Exception {
-        // TODO: remove external call, unit tests should be independet
+        // TODO: remove external call, unit tests should be independent
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(VIRUS_DATA_URL))
