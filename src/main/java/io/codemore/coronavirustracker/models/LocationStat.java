@@ -5,12 +5,12 @@ import lombok.Data;
 
 @Data
 @Builder
-public class LocationStats {
-
-    private String state;
+public class LocationStat {
 
     private String country;
 
-    private int latestTotal;
+    private int latestTotalCases;
+
+    private int diffFromPrevDay;
 
 }
