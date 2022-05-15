@@ -11,7 +11,7 @@
     <h1>CoronaVirus Tracker</h1>
     <p>This application lists the current number of cases reported across the globe.</p>
 
-    <div class="jumbotron">
+    <div class="jumbotron" id="box">
         <h1 class="display-4" th:text = "${totalReportedCases}">Total cases</h1>
         <p class="lead">Total cases reported as of today</p>
         <hr class="my-4">
@@ -34,5 +34,8 @@
         </tr>
     </table>
 </div>
+<script>
+    document.getElementById("box").style.backgroundColor = "#D35D6E";
+</script>
 </body>
 </html>

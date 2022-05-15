@@ -1,13 +1,12 @@
 package io.codemore.coronavirustracker.controllers;
 
-import io.codemore.coronavirustracker.models.LocationStat;
 import io.codemore.coronavirustracker.services.CoronaVirusDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
+import static io.codemore.coronavirustracker.utils.DecimalFormatUtils.decimalFormatter;
 
 @Controller
 public class HomeController {
@@ -17,13 +16,9 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        List<LocationStat> allStats = coronaVirusDataService.getAllStats();
-        int totalReportedCases = allStats.stream().mapToInt(LocationStat::getLatestTotalCases).sum();
-        int totalNewCases = allStats.stream().mapToInt(LocationStat::getDiffFromPrevDay).sum();
-
-        model.addAttribute("locationStats", allStats);
-        model.addAttribute("totalReportedCases", totalReportedCases);
-        model.addAttribute("totalNewCases", totalNewCases);
+        model.addAttribute("locationStats", coronaVirusDataService.getAllStats());
+        model.addAttribute("totalReportedCases", decimalFormatter(coronaVirusDataService.getTotalReportedCases()));
+        model.addAttribute("totalNewCases", decimalFormatter(coronaVirusDataService.getTotalNewCases()));
 
         return "home";
     }

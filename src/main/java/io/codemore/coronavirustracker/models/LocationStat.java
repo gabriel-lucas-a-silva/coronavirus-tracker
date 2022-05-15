@@ -9,8 +9,8 @@ public class LocationStat {
 
     private String country;
 
-    private int latestTotalCases;
+    private String latestTotalCases;
 
-    private int diffFromPrevDay;
+    private String diffFromPrevDay;
 
 }

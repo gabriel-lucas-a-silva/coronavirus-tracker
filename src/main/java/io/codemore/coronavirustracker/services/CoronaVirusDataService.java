@@ -18,6 +18,8 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.codemore.coronavirustracker.utils.DecimalFormatUtils.decimalFormatter;
+
 @Service
 @Data
 public class CoronaVirusDataService {
@@ -25,6 +27,8 @@ public class CoronaVirusDataService {
     private static String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
     private static String COUNTRY = "Country/Region";
     private List<LocationStat> allStats = new ArrayList<>();
+    private int totalReportedCases;
+    private int totalNewCases;
 
     @PostConstruct
     @Scheduled(cron = "* * 1 * * *")
@@ -65,11 +69,13 @@ public class CoronaVirusDataService {
             } else {
                 LocationStat locationStat = LocationStat.builder()
                         .country(country)
-                        .latestTotalCases(lastCountry.equals(country) ? lastTotalCasesReported : latestCases) // if last country is equals to my actual one, that means I have accumulative data
-                        .diffFromPrevDay(latestCases - prevDayCases)
+                        .latestTotalCases(lastCountry.equals(country) ? decimalFormatter(lastTotalCasesReported) : decimalFormatter(latestCases)) // if last country is equals to my actual one, that means I have accumulative data
+                        .diffFromPrevDay(decimalFormatter(latestCases - prevDayCases))
                         .build();
 
                 newStats.add(locationStat);
+                this.totalReportedCases += lastCountry.equals(country) ? lastTotalCasesReported : latestCases;
+                this.totalNewCases += latestCases - prevDayCases;
                 lastTotalCasesReported = 0;
             }
         }
